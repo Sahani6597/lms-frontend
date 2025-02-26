@@ -1,15 +1,15 @@
 import { View, Text, Pressable, TextInput } from 'react-native'
 import React from 'react'
 import Feather from '@expo/vector-icons/Feather';
+import { useAuthStore } from '../../store/authStore';
 
 const Header = () => {
-
     return (
         <View className="pt-[24px] px-4 bg-blue-600">
             <View className='flex-row items-center justify-between'>
                 <View >
                     <Text className="pt-3 text-lg text-white font-['Poppins']">Hello , 👋</Text>
-                    <Text className="text-2xl text-white font-['PoppinsBold']">Mithun</Text>
+                    <Text className="text-2xl text-white font-['PoppinsBold']">Sahani</Text>
                 </View>
                 <View>
                     <Feather name="bell" size={30} color="white" />

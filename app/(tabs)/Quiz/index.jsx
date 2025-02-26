@@ -1,10 +1,10 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Button } from 'react-native';
 import React from 'react';
 import { Quiz } from "../../../constants/quizData";
 import { router } from 'expo-router';
 
 const Index = () => {
-  
+
   return (
     <View className="flex-1 bg-white mt-6 px-3">
       {/* Heading */}

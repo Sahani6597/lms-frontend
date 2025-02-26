@@ -39,7 +39,7 @@ const Home = () => {
         <Header />
         <Explore />
         {/* Course Section */}
-        <Text className="text-3xl px-3 pt-2 font-['PoppinsBold']">
+        <Text className="text-2xl px-3 pt-2 font-['PoppinsBold'] text-gray-800">
           Trending
         </Text>
         <Pressable onPress={()=>(router.push({pathname:`/Course/CourseDetail`,params: { course: JSON.stringify(course)},}))}>

@@ -1,20 +1,25 @@
+import { Stack, useRouter } from "expo-router";
+import { useEffect } from "react";
+import { useAuthStore } from "@/store/authStore"; // ✅ Import Zustand store
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import React from 'react'
-import {  Stack} from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
+export default function Layout() {
+  const router = useRouter();
+  const { token, login } = useAuthStore();
 
-const _layout = () => {
-  return (
-    <>
-    <StatusBar style="dark" />
-    <Stack>
-       <Stack.Screen name='index' options={{headerShown:false}}/>
-       <Stack.Screen name='(auth)' options={{headerShown:false}}/>
-       <Stack.Screen name='(tabs)' options={{headerShown:false}}/>
-       <Stack.Screen name='Course/CourseDetail' options={{headerShown:false}}/>
-    </Stack> 
-    </>
-  )
+  useEffect(() => {
+    const checkAuth = async () => {
+      const storedToken = await AsyncStorage.getItem("token");
+      if (storedToken) {
+        login(storedToken); // ✅ Restore token
+        router.replace("/(tabs)"); // ✅ Redirect to Home if authenticated
+      } else {
+        router.replace("/(tabs)"); // ✅ Redirect to Login if not
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  return <Stack screenOptions={{headerShown:false}} />;
 }
-
-export default _layout

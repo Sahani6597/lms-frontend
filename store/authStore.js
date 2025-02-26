@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import jwtDecode from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode"; 
 
 export const useAuthStore = create((set) => ({
-  user: null,
+  user: null,   // Stores user details
+  token: null,  // Stores the JWT token
   loading: true,
 
   checkAuth: async () => {
@@ -14,10 +15,10 @@ export const useAuthStore = create((set) => ({
         const isExpired = decoded.exp * 1000 < Date.now();
 
         if (!isExpired) {
-          set({ user: token });
+          set({ user: decoded, token });
         } else {
           await AsyncStorage.removeItem("userToken");
-          set({ user: null });
+          set({ user: null, token: null });
         }
       }
     } catch (error) {
@@ -27,12 +28,13 @@ export const useAuthStore = create((set) => ({
   },
 
   login: async (token) => {
+    const decoded = jwtDecode(token); // Decode user info from token
     await AsyncStorage.setItem("userToken", token);
-    set({ user: token });
+    set({ user: decoded, token });
   },
 
   logout: async () => {
     await AsyncStorage.removeItem("userToken");
-    set({ user: null });
-  }
+    set({ user: null, token: null });
+  },
 }));

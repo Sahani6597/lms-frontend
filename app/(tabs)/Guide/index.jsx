@@ -49,7 +49,7 @@ const GuideScreen = () => {
                 onPress={() => setSelectedTopic(topic.id)}
               >
                 <Text
-                  className={`text-lg font-['PoppinsMed'] ${
+                  className={`text-lg font-['PoppinsBold'] ${
                     selectedTopic === topic.id ? 'text-blue-600' : 'text-gray-900'
                   }`}
                 >
@@ -75,8 +75,8 @@ const GuideScreen = () => {
                 onPress={() => setSelectedTime(slot.id)}
               >
                 <Text
-                  className={`text-lg font-['PoppinsMed'] ${
-                    selectedTime === slot.id ? 'text-blue-900' : 'text-gray-900'
+                  className={`text-lg font-['PoppinsBold'] ${
+                    selectedTime === slot.id ? 'text-blue-600' : 'text-gray-900'
                   }`}
                 >
                   {slot.time}
@@ -108,7 +108,7 @@ const GuideScreen = () => {
             }
           }}
         >
-          <Text className="text-3xl font-['PoppinsBold'] text-white text-center">Book Now</Text>
+          <Text className="text-2xl font-['PoppinsBold'] text-white text-center">Book Now</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

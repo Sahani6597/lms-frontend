@@ -67,7 +67,7 @@ const CourseDetail = () => {
         </View>
         <TouchableOpacity className="sticky bottom-0 mx-3 py-3 bg-blue-700 mt-4 mb-10 rounded-md">
           <Text
-            className="text-3xl font-['PoppinsBold'] text-center text-white "
+            className="text-2xl font-['PoppinsBold'] text-center text-white "
             style={{ textAlignVertical: 'center' }}
           >
             Enroll Now 

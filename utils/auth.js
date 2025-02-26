@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://192.168.1.105:5000/api/users"; // Update with your backend IP
+const API_BASE_URL = "http://192.168.1.103:5000/api/users"; // Update with your backend IP
 
 export const signupUser = async (userData) => {
   try {

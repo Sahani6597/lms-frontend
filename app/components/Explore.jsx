@@ -4,20 +4,24 @@ import React from 'react'
 const BarItems = [
     {
       name: 'Course',
-      color: '#00A9FF'
+      color: '#00A9FF',
+      routes:'/(tabs)/Explore/Course'
     },
     {
       name: 'Guide',
-      color: '#3AA6B9'
+      color: '#3AA6B9',
+      routes:'/(tabs)/Guide'
     },
   
     {
       name: 'Quiz',
-      color: '#FF76CE'
+      color: '#FF76CE',
+      routes:'/(tabs)/Guide'
     },
     {
       name: 'Books',
-      color: '#7C00FE'
+      color: '#7C00FE',
+      routes:'/(tabs)/Guide'
     },
     {
       name: 'More',
@@ -27,7 +31,7 @@ const BarItems = [
 export default function Explore() {
   return (
     <View className='h-56 gap-2'>
-    <Text className="text-3xl px-3 pt-2 font-['PoppinsBold']">
+    <Text className="text-2xl px-3 pt-2 font-['PoppinsBold'] text-gray-800">
       Explore
     </Text>
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>

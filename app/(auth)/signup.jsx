@@ -34,7 +34,7 @@ const Signup = () => {
 
   return (
     <SafeAreaView className="bg-white flex-1">
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="flex-row items-center justify-between mt-4 px-2">
           <Text className="text-3xl font-['PoppinsBold']">Sign up</Text>
