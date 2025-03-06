@@ -104,7 +104,7 @@ const Signup = () => {
         {/* Navigation to Login */}
         <Text className="mt-5 text-center text-md font-['PoppinsMed']">
           Already Registered?  
-          <Link href={"/(auth)"}>
+          <Link href={"/(auth)/signin"}>
             <Text className="text-blue-500"> Sign in</Text>
           </Link>
         </Text>

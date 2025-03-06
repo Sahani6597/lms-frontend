@@ -1,9 +1,12 @@
-import { router } from 'expo-router';
-import React, { useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, Keyboard, StatusBar } from 'react-native';
+import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
+import { useRouter } from 'expo-router';
+import { useAuthStore } from '@/store/authStore';
 import "../global.css"; // global css
+
 export default function RootLayout() {
+  const router = useRouter();
+  const { token } = useAuthStore();
 
   const [fontsLoaded] = useFonts({
     Poppins: require('@/assets/fonts/Poppins.ttf'),
@@ -15,9 +18,13 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (fontsLoaded) {
-      Keyboard.dismiss();
+      if (token) {
+        router.replace("/(tabs)");
+      } else {
+        router.replace("/(auth)");
+      }
     }
-  }
-  );
-  return;
+  }, [fontsLoaded, token]);
+
+  return null;
 }

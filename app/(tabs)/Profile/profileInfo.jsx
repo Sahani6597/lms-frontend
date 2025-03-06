@@ -2,15 +2,13 @@ import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useState } from "react";
+import { useAuthStore } from '../../../store/authStore';
 
 const ProfileInfo = () => {
   const router = useRouter();
-  
-  // Dummy user data (to be replaced with actual user data from store)
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("johndoe@example.com");
-  const [phone, setPhone] = useState("");
+
+  const { getUserInfo } = useAuthStore();
+  const { name, email } = getUserInfo();
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -29,7 +27,7 @@ const ProfileInfo = () => {
         <TextInput
           className="w-full h-12 px-3 rounded-lg border border-gray-300 bg-gray-100 text-lg"
           value={name}
-          onChangeText={setName}
+          editable={false}
         />
 
         {/* Email (Read-only) */}
@@ -45,9 +43,8 @@ const ProfileInfo = () => {
         <TextInput
           className="w-full h-12 px-3 rounded-lg border border-gray-300 bg-gray-100 text-lg"
           placeholder="Enter your phone number"
-          value={phone}
-          onChangeText={setPhone}
           keyboardType="phone-pad"
+          editable={false}
         />
 
         {/* Save Button */}

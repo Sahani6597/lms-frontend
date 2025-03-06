@@ -11,6 +11,8 @@ const _layout = () => {
         <Stack.Screen name="milestone"/>
         <Stack.Screen name="certificates"/>
         <Stack.Screen name="profileInfo"/>
+        <Stack.Screen name="courseStatus"/>
+        <Stack.Screen name="guidenceStatus"/>
     </Stack>  )
 }
 

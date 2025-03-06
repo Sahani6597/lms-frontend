@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { jwtDecode } from "jwt-decode"; 
+import { jwtDecode } from "jwt-decode";
 
 export const useAuthStore = create((set) => ({
   user: null,   // Stores user details
@@ -36,5 +36,10 @@ export const useAuthStore = create((set) => ({
   logout: async () => {
     await AsyncStorage.removeItem("userToken");
     set({ user: null, token: null });
+  },
+
+  getUserInfo: () => {
+    const state = useAuthStore.getState();
+    return state.user ? { name: state.user.name, email: state.user.email } : { name: "Guest", email: "" };
   },
 }));

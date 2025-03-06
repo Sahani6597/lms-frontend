@@ -1,7 +1,7 @@
 import { View, Text, Image, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { useLocalSearchParams } from 'expo-router';
-import { FontAwesome5 } from '@expo/vector-icons'; // For rating stars
+import { router, useLocalSearchParams } from 'expo-router';
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons'; // For rating stars
 import { StatusBar } from 'expo-status-bar';
 
 const CourseDetail = () => {
@@ -11,12 +11,21 @@ const CourseDetail = () => {
   return (
     <SafeAreaView className='flex-1 bg-white' >
       <StatusBar style="dark" />
+     
       <ScrollView className="pt-8"  showsVerticalScrollIndicator={false} >
+
+      <View className="flex-row items-center py-3 mb-3  border-b border-gray-300">
+      <TouchableOpacity onPress={() => router.back()}>
+        <AntDesign name="left" size={30} color="blue" />
+        </TouchableOpacity>
+        <Text className="text-2xl font-['PoppinsBold'] ml-4">Course Detail</Text>
+      </View>
+
         {/* Course Image Section */}
         <View className="w-full px-2">
           <View className="w-full h-64 rounded-2xl overflow-hidden shadow-lg">
             <Image
-              source={parsedCourse.image}
+              source={{uri:parsedCourse.image}}
               className="w-full h-full object-cover"
             />
           </View>

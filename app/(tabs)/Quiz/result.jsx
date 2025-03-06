@@ -1,12 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import useQuizStore from '../../../store/quizStore';
 
 const ResultScreen = () => {
-  const { score, totalQuestion,quizid } = useLocalSearchParams();
+  const { score, totalQuestion, quizId } = useLocalSearchParams();
   const router = useRouter();
-  // Calculate percentage
-  const percentage = ((score / totalQuestion) * 100).toFixed(2);
+  const quizScore = useQuizStore((state) => state.getQuizScore(quizId));
+  const percentage = quizScore?.percentage || ((score / totalQuestion) * 100).toFixed(2);
 
   // Handle retaking the quiz
   const handleRetakeQuiz = () => {

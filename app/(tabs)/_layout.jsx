@@ -1,10 +1,11 @@
-import { Tabs } from 'expo-router';
+import { Tabs, usePathname } from 'expo-router';
 import { Ionicons, MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { Keyboard } from 'react-native';
 
 export default function Layout() {
   const [isTabVisible, setIsTabVisible] = useState(true);
+  const pathname = usePathname(); // Get the current route path
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener('keyboardDidShow', () => {
@@ -21,6 +22,9 @@ export default function Layout() {
     };
   }, []);
 
+  // Hide the tab bar when navigating inside Quiz subpages
+  const shouldHideTabBar = pathname.startsWith('/Quiz/');
+
   return (
     <Tabs
       screenOptions={{
@@ -28,7 +32,7 @@ export default function Layout() {
         tabBarActiveTintColor: '#2563eb',
         tabBarInactiveTintColor: 'gray',
         tabBarStyle: {
-          display: isTabVisible ? 'flex' : 'none', // Hide tabs when keyboard is visible
+          display: isTabVisible && !shouldHideTabBar ? 'flex' : 'none', // Hide when keyboard is visible or on Quiz subpages
         },
       }}
     >
@@ -38,7 +42,7 @@ export default function Layout() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="home" size={30} color={color} />
           ),
-          tabBarLabel: 'Home', // Title for the Home tab
+          tabBarLabel: 'Home',
         }}
       />
       <Tabs.Screen
@@ -47,7 +51,7 @@ export default function Layout() {
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="explore" size={30} color={color} />
           ),
-          tabBarLabel: 'Guide', // Title for the Guide tab
+          tabBarLabel: 'Guide',
         }}
       />
       <Tabs.Screen
@@ -56,7 +60,7 @@ export default function Layout() {
           tabBarIcon: ({ color }) => (
             <Ionicons name="search" size={30} color={color} />
           ),
-          tabBarLabel: 'Search', // Title for the Search tab
+          tabBarLabel: 'Search',
         }}
       />
       <Tabs.Screen
@@ -65,7 +69,7 @@ export default function Layout() {
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="quiz" size={30} color={color} />
           ),
-          tabBarLabel: 'Quiz', // Title for the Quiz tab
+          tabBarLabel: 'Quiz',
         }}
       />
       <Tabs.Screen
@@ -74,7 +78,7 @@ export default function Layout() {
           tabBarIcon: ({ color }) => (
             <FontAwesome name="user" size={30} color={color} />
           ),
-          tabBarLabel: 'Profile', // Title for the Profile tab
+          tabBarLabel: 'Profile',
         }}
       />
     </Tabs>

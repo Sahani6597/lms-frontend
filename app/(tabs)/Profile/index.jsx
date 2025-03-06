@@ -1,13 +1,20 @@
 import { View, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import Entypo from '@expo/vector-icons/Entypo';
+import { FontAwesome, Entypo, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useAuthStore } from '../../../store/authStore';
 
 const Profile = () => {
   const router = useRouter();
+  const { getUserInfo, logout } = useAuthStore();
+  const { name, email } = getUserInfo();
+
+  const handleLogout = async () => {
+    await logout();
+    router.replace('/(auth)/');
+  };
+
   const data = [
     {
       name: "Profile Info",
@@ -15,9 +22,9 @@ const Profile = () => {
       route:"/(tabs)/Profile/profileInfo",
     },
     {
-      name: "Certificates",
-      icon: <FontAwesome name="certificate" size={28} color="grey" />,
-      route:"/(tabs)/Profile/certificates",
+      name: "Guidence Session ",
+      icon: <MaterialIcons name="bookmarks" size={28} color="grey" />,
+      route:"/(tabs)/Profile/guidenceStatus",
     },
     {
       name: "Milestones",
@@ -27,7 +34,7 @@ const Profile = () => {
     {
       name: "Course Status",
       icon: <MaterialIcons name="school" size={28} color="grey" />,
-      route:"/(tabs)/Profile/transaction",
+      route:"/(tabs)/Profile/courseStatus",
     },
     {
       name: "Transaction History",
@@ -35,20 +42,33 @@ const Profile = () => {
       route:"/(tabs)/Profile/transaction",
     },
     {
+      name: "Certificates",
+      icon: <FontAwesome name="certificate" size={28} color="grey" />,
+      route:"/(tabs)/Profile/certificates",
+    },
+    {
       name: "Feedback",
       icon: <Entypo name="chat" size={28} color="grey" />,
       route:"/(tabs)/Profile/feedback",
     },
   ];
+
   return (
     <SafeAreaView className="flex-1 bg-white pt-10 px-4">
       <StatusBar style="dark" />
 
       {/* Header Section */}
-      <View className="flex-row justify-between items-center w-full">
+      {/* <View className="flex-row justify-between items-center w-full">
         <Text className="text-3xl font-['PoppinsBold'] text-gray-800">Profile</Text>
         <MaterialIcons name="help-outline" size={30} color="#2563EB" />
-      </View>
+      </View> */}
+
+      <View className="flex-row items-center justify-between py-2 px-2 border-b border-gray-300">
+        <Text className="text-2xl font-['PoppinsBold']">Profile</Text>
+        <TouchableOpacity onPress={() => router.back()}>
+          <MaterialIcons name="help-outline" size={28} color="#2563EB" />
+        </TouchableOpacity>
+      </View> 
 
       {/* Profile Info Section */}
       <View className="mt-2 bg-blue-700 h-32 w-full rounded-xl flex-row items-center px-4">
@@ -59,8 +79,8 @@ const Profile = () => {
           />
         </View>
         <View className="ml-4">
-          <Text className="text-2xl font-['PoppinsSemiBold'] text-white">Sahani</Text>
-          <Text className="text-sm text-white font-['PoppinsSemiBold'] ">abcd@123</Text>
+          <Text className="text-2xl font-['PoppinsSemiBold'] text-white">{name}</Text>
+          <Text className="text-sm text-white font-['PoppinsSemiBold']">{email}</Text>
         </View>
       </View>
 
@@ -70,7 +90,7 @@ const Profile = () => {
           className="mt-3 h-14 w-full flex-row items-center px-4 border-b border-gray-300"
           key={index}
           onPress={()=>router.push(item.route)}
-          >
+        >
           <View className="w-10 justify-center items-center">
             {item.icon}
           </View>
@@ -80,7 +100,10 @@ const Profile = () => {
       ))}
 
       {/* Log Out Section */}
-      <TouchableOpacity className="mt-4 px-4 flex-row items-center" >
+      <TouchableOpacity 
+        className="mt-4 px-4 flex-row items-center" 
+        onPress={handleLogout}
+      >
         <MaterialIcons name="exit-to-app" size={26} color="red" />
         <Text className="text-xl text-red-600 font-['PoppinsBold'] ml-2">Log Out</Text>
       </TouchableOpacity>
