@@ -1,13 +1,49 @@
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import useQuizStore from '../../../store/quizStore';
-
+import { useAuthStore } from "../../../store/authStore";
+import { API_BK } from "../../../config";
 const ResultScreen = () => {
   const { score, totalQuestion, quizId } = useLocalSearchParams();
   const router = useRouter();
-  const quizScore = useQuizStore((state) => state.getQuizScore(quizId));
-  const percentage = quizScore?.percentage || ((score / totalQuestion) * 100).toFixed(2);
+  const [loading, setLoading] = useState(true);
+  const [quizScore, setQuizScore] = useState(null);
+  const token = useAuthStore().token;
+  useEffect(() => {
+    const saveScore = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_BK}/quiz-scores`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            quizId,
+            score: parseInt(score)
+          })
+        });
+        const data = await response.json();
+        setQuizScore(data);
+      } catch (error) {
+        console.error('Failed to save score:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    saveScore();
+  }, []);
+
+  const percentage = ((score / totalQuestion) * 100).toFixed(2);
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
   // Handle retaking the quiz
   const handleRetakeQuiz = () => {

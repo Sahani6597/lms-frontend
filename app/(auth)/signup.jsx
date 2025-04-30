@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { 
-  View, Text, Image, TextInput, TouchableOpacity, ScrollView, Alert 
+  View, Text, Image, TextInput, TouchableOpacity, ScrollView, Alert, Modal, FlatList 
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,9 +13,13 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("student"); // Default role
+  const [dropdownVisible, setDropdownVisible] = useState(false); // Dropdown visibility
+
+  const roles = ["student", "instructor"]; // Role options
 
   const handleSignup = async () => {
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password || !confirmPassword || !role) {
       Alert.alert("Error", "All fields are required");
       return;
     }
@@ -25,7 +29,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await signupUser({ name, email, password });
+      const response = await signupUser({ name, email, password, role });
       Alert.alert("Success", response.message);
     } catch (error) {
       Alert.alert("Error", error);
@@ -79,6 +83,67 @@ const Signup = () => {
             value={confirmPassword}
             onChangeText={setConfirmPassword}
           />
+
+          {/* Dropdown for Role */}
+          <TouchableOpacity
+            className="w-full h-14 px-3 py-2 mt-3 rounded-lg bg-gray-300 justify-center"
+            onPress={() => setDropdownVisible(true)}
+          >
+            <Text className="text-2xl font-['Poppins'] text-gray-700">
+              {role.charAt(0).toUpperCase() + role.slice(1)} {/* Capitalize role */}
+            </Text>
+          </TouchableOpacity>
+
+          {/* Dropdown Modal */}
+          <Modal
+            visible={dropdownVisible}
+            transparent={true}
+            animationType="fade"
+          >
+            <TouchableOpacity
+              style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }}
+              onPress={() => setDropdownVisible(false)}
+            />
+            <View
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "10%",
+                right: "10%",
+                backgroundColor: "white",
+                borderRadius: 10,
+                padding: 10,
+              }}
+            >
+              <FlatList
+                data={roles}
+                keyExtractor={(item) => item}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={{
+                      padding: 10,
+                      borderBottomWidth: 1,
+                      borderBottomColor: "#ccc",
+                    }}
+                    onPress={() => {
+                      setRole(item);
+                      setDropdownVisible(false);
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontFamily: "Poppins",
+                        color: "black",
+                      }}
+                    >
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </Modal>
 
           {/* Signup Button */}
           <TouchableOpacity 

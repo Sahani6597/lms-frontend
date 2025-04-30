@@ -1,4 +1,3 @@
-
 # dependencies
 node_modules/
 
@@ -30,6 +29,12 @@ yarn-error.*
 
 # local env files
 .env*.local
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
 
 # typescript
 *.tsbuildinfo

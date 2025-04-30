@@ -1,35 +1,41 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getUserQuizScores, saveQuizScore } from '../utils/quiz';
 
-const useQuizStore = create(
-  persist(
-    (set, get) => ({
-      scores: {},
-      setQuizScore: (quizId, newScore, totalQuestions) => {
-        set((state) => ({
-          scores: {
-            ...state.scores,
-            [quizId]: {
-              score: newScore,
-              totalQuestions,
-              percentage: ((newScore / totalQuestions) * 100).toFixed(2),
-              lastAttempt: new Date().toISOString(),
-            },
-          },
-        }));
-      },
-      getQuizScore: (quizId) => {
-        const scores = get().scores;
-        return scores[quizId] || null;
-      },
-      clearScores: () => set({ scores: {} }),
-    }),
-    {
-      name: 'quiz-storage',
-      storage: createJSONStorage(() => AsyncStorage),
+const useQuizStore = create((set, get) => ({
+  quizScores: [],
+  loading: false,
+  error: null,
+
+  fetchQuizScores: async () => {
+    set({ loading: true });
+    try {
+      const scores = await getUserQuizScores();
+      set({ quizScores: scores, loading: false });
+    } catch (error) {
+      set({ error: error.message, loading: false });
     }
-  )
-);
+  },
+
+  saveQuizScore: async (quizId, score, totalQuestions) => {
+    set({ loading: true });
+    try {
+      const percentage = ((score / totalQuestions) * 100).toFixed(2);
+      const savedScore = await saveQuizScore({quizId,score});
+      set(state => ({
+        quizScores: [...state.quizScores, savedScore],
+        loading: false
+      }));
+      return savedScore;
+    } catch (error) {
+      set({ error: error.message, loading: false });
+      throw error;
+    }
+  },
+
+  getQuizScore: (quizId) => {
+    const scores = get().quizScores;
+    return scores.find(score => score.quizId === quizId);
+  }
+}));
 
 export default useQuizStore;

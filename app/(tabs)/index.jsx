@@ -20,9 +20,9 @@ const Home = () => {
       <ScrollView className='mb-2' showsVerticalScrollIndicator={false}>
         <Header />
         <Explore />
-        
+
         {/* Course Section */}
-        <Text className="text-2xl px-3 pt-2 font-['PoppinsBold'] text-gray-800">
+        <Text className="text-2xl px-3 pt-2 font-['PoppinsSemiBold'] text-gray-800">
           Trending
         </Text>
 
@@ -44,12 +44,7 @@ const Home = () => {
                   })
                 }
               >
-                <Coursecard
-                  title={course.title}
-                  imageSource={course.image}
-                  price={course.price}
-                  rating={course.rating}
-                />
+                <Coursecard title={course.title} imageSource={course.image} price={course.price} rating={course.rating}/>
               </Pressable>
             ))}
 

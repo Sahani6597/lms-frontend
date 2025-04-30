@@ -1,21 +1,48 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Quiz } from "../../../constants/quizData";
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import useQuizStore from '../../../store/quizStore';
+import axios from 'axios';
+import {useAuthStore} from '../../../store/authStore';
+import { API_BK } from '../../../config';
 
 const Index = () => {
-  const getQuizScore = useQuizStore((state) => state.getQuizScore);
+  const [quizScores, setQuizScores] = useState({});
+  const token =useAuthStore().token;
+  const fetchQuizScores = async () => {
+    try {
+      const response = await axios.get(`${API_BK}/quiz-scores`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const scores = response.data.reduce((acc, score) => {
+        acc[score.quizId] = score;
+        return acc;
+      }, {});
+      setQuizScores(scores);
+    } catch (error) {
+      console.error('Error fetching quiz scores:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchQuizScores();
+  }, []);
+
+  const getQuizScore = (quizId) => {
+    return quizScores[quizId] || { score: 0 };
+  };
 
   return (
     <View className="flex-1 bg-white mt-6 px-3">
       <StatusBar style="dark" />
       {/* Heading */}
-      <Text className="text-3xl font-['PoppinsBold'] text-center mt-5">
+      <Text className="text-2xl font-['PoppinsBold'] text-center mt-5">
         Technical Quizzes 📖
       </Text>
-      <Text className="text-lg text-center mb-8 font-['PoppinsMed']">
+      <Text className="text-md text-center mb-8 font-['PoppinsMed']">
         Test your knowledge 🧠 with these quizzes!
       </Text>
 
@@ -35,7 +62,7 @@ const Index = () => {
               }
             >
               <View>
-                <Text className="text-2xl font-['PoppinsBold']">
+                <Text className="text-xl font-['PoppinsBold']">
                   {item.title}
                 </Text>
                 <Text className="text-md text-gray-900 font-['PoppinsMed'] mt-1">

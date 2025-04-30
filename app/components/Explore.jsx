@@ -3,20 +3,19 @@ import React from 'react';
 import { useRouter } from 'expo-router';
 
 const BarItems = [
-    { name: 'Course', color: '#00A9FF', route: '/(tabs)/Explore/Course' },
-    { name: 'Guide', color: '#3AA6B9', route: '/(tabs)/Guide' },
-    { name: 'Quiz', color: '#FF76CE', route: '/(tabs)/Guide' },
-    { name: 'Books', color: '#7C00FE', route: '/(tabs)/Guide' },
-    { name: 'More', color: '#5C2FC2', route: '/(tabs)/Guide' },
+    { name: 'Course', color: '#4F46E5', route: '/(tabs)/Search' }, // Deep indigo
+    { name: 'Guide', color: '#0EA5E9', route: '/(tabs)/Guide' },   // Sky blue
+    { name: 'Quiz', color: '#EC4899', route: '/(tabs)/Quiz' },     // Pink
+    { name: 'More', color: '#8B5CF6', route: '/(tabs)/Profile' },  // Purple
 ];
 
 export default function Explore() {
     const router = useRouter();
 
     return (
-        <View className="py-4">
+        <View className="py-2">
             {/* Title */}
-            <Text className="text-2xl px-4 font-[PoppinsBold] text-gray-800">
+            <Text className="text-2xl px-4 font-[PoppinsSemiBold] text-gray-800">
                 Explore
             </Text>
 
@@ -31,7 +30,7 @@ export default function Explore() {
                     <Pressable 
                         key={index} 
                         onPress={() => router.push(item.route)}
-                        className="h-44 w-36 mx-2 justify-center items-center rounded-2xl shadow-lg active:opacity-80"
+                        className="h-40 w-36 mx-2 justify-center items-center rounded-xl shadow-lg active:opacity-80"
                         style={{ backgroundColor: item.color }}
                     >
                         <Text className="text-3xl text-white font-['PoppinsBold']">{item.name}</Text>

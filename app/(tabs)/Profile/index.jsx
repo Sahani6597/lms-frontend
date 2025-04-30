@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, Image, TouchableOpacity, ScrollView } from 'react-native';
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { FontAwesome, Entypo, AntDesign, MaterialIcons } from '@expo/vector-icons';
@@ -57,56 +57,57 @@ const Profile = () => {
     <SafeAreaView className="flex-1 bg-white pt-10 px-4">
       <StatusBar style="dark" />
 
-      {/* Header Section */}
-      {/* <View className="flex-row justify-between items-center w-full">
-        <Text className="text-3xl font-['PoppinsBold'] text-gray-800">Profile</Text>
-        <MaterialIcons name="help-outline" size={30} color="#2563EB" />
-      </View> */}
-
       <View className="flex-row items-center justify-between py-2 px-2 border-b border-gray-300">
         <Text className="text-2xl font-['PoppinsBold']">Profile</Text>
         <TouchableOpacity onPress={() => router.back()}>
           <MaterialIcons name="help-outline" size={28} color="#2563EB" />
         </TouchableOpacity>
-      </View> 
-
-      {/* Profile Info Section */}
-      <View className="mt-2 bg-blue-700 h-32 w-full rounded-xl flex-row items-center px-4">
-        <View className="w-20 h-20 bg-white rounded-full justify-center items-center">
-          <Image
-            source={require('@/assets/images/books.png')}
-            className="w-12 h-12 rounded-full"
-          />
-        </View>
-        <View className="ml-4">
-          <Text className="text-2xl font-['PoppinsSemiBold'] text-white">{name}</Text>
-          <Text className="text-sm text-white font-['PoppinsSemiBold']">{email}</Text>
-        </View>
       </View>
 
-      {/* Menu Items Section */}
-      {data.map((item, index) => (
-        <TouchableOpacity
-          className="mt-3 h-14 w-full flex-row items-center px-4 border-b border-gray-300"
-          key={index}
-          onPress={()=>router.push(item.route)}
-        >
-          <View className="w-10 justify-center items-center">
-            {item.icon}
+      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
+        {/* Profile Info Section */}
+        <View className="mt-4 items-center">
+          {/* Profile Image Container (Larger) */}
+          <View className="w-32 h-32 bg-transparent rounded-full justify-center items-center border-4 border-black">
+            <Image
+              source={require('@/assets/images/profile1.jpg')}
+              className="w-28 h-28 rounded-full"
+            />
           </View>
-          <Text className="text-xl font-['PoppinsMed'] ml-4 flex-1">{item.name}</Text>
-          <MaterialIcons name="navigate-next" size={24} color="grey" />
-        </TouchableOpacity>
-      ))}
 
-      {/* Log Out Section */}
-      <TouchableOpacity 
-        className="mt-4 px-4 flex-row items-center" 
-        onPress={handleLogout}
-      >
-        <MaterialIcons name="exit-to-app" size={26} color="red" />
-        <Text className="text-xl text-red-600 font-['PoppinsBold'] ml-2">Log Out</Text>
-      </TouchableOpacity>
+          {/* User Info */}
+          <View className="mt-4 items-center">
+            <Text className="text-2xl font-['PoppinsSemiBold'] text-gray-900">{name || 'User'}</Text>
+            <Text className="text-sm text-gray-500 font-['PoppinsSemiBold'] mt-1">{email || 'No email'}</Text>
+          </View>
+        </View>
+
+        {/* Menu Items Section */}
+        {data.map((item, index) => (
+          <TouchableOpacity
+            className="mt-3 h-14 w-full flex-row items-center px-4 border-b border-gray-300"
+            key={index}
+            onPress={()=>router.push(item.route)}
+          >
+            <View className="w-10 justify-center items-center">
+              {item.icon}
+            </View>
+            <Text className="text-lg font-['PoppinsMed'] ml-4 flex-1">{item.name}</Text>
+            <MaterialIcons name="navigate-next" size={24} color="grey" />
+          </TouchableOpacity>
+        ))}
+
+        {/* Log Out Section */}
+        <View className="py-4">
+          <TouchableOpacity 
+            className="px-6 py-3 flex-row items-center justify-center bg-red-50 rounded-xl mx-4" 
+            onPress={handleLogout}
+          >
+            <MaterialIcons name="exit-to-app" size={26} color="#EF4444" />
+            <Text className="text-xl text-red-500 font-['PoppinsBold'] ml-2">Log Out</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

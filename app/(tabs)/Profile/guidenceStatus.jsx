@@ -1,18 +1,29 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
-import { Ionicons, FontAwesome, AntDesign } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useState, useEffect } from "react";
+import { useAuthStore } from '../../../store/authStore';
+import useGuideStore from '../../../store/guideStore';
 
-const queries = [
-  { topic: "Joined the Platform", timeSlot: "2025-03-06", status: "completed" },
-  { topic: "Completed First Course", timeSlot: "2025-03-10", status: "completed" },
-  { topic: "Earned First Certificate", timeSlot: "2025-04-01", status: "pending" },
-  { topic: "Completed 5 Courses", timeSlot: "2025-05-15", status: "pending" },
-  { topic: "Top 10% of Learners", timeSlot: "2025-06-20", status: "pending" },
-];
-
-const guidenceStatus = () => {
+const GuidanceStatus = () => {
   const router = useRouter();
+  const token = useAuthStore((state) => state.token);
+  const { sessions, loading, error, fetchSessions } = useGuideStore();
+
+  useEffect(() => {
+    if (token) {
+      fetchSessions(token).catch(console.error);
+    }
+  }, [token]);
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -24,27 +35,83 @@ const guidenceStatus = () => {
         <Text className="text-2xl font-['PoppinsBold'] ml-4">Your Sessions</Text>
       </View>
 
-      {/* Milestones List */}
-      <ScrollView className="p-4">
-        {queries.map((item, index) => (
-          <View
-            key={index}
-            className={`p-4 mb-2 rounded-lg ${
-              item.status === "completed" ? "bg-green-100" : "bg-gray-200"
-            }`}
+      {error ? (
+        <View className="p-4">
+          <Text className="text-red-500 font-['PoppinsMed'] text-center">{error}</Text>
+          <TouchableOpacity 
+            onPress={fetchSessions}
+            className="mt-4 bg-blue-500 p-3 rounded-lg"
           >
-            <Text className="text-lg font-['PoppinsSemiBold']">{item.topic}</Text>
-            <Text className="text-md text-gray-700  font-['PoppinsMed']">Time Slot: {item.timeSlot}</Text>
-            <Text className={`text-md font-['Poppins'] ${
-              item.status === "completed" ? "text-green-600" : "text-yellow-600"
-            }`}>
-              Status: {item.status}
-            </Text>
-          </View>
-        ))}
-      </ScrollView>
+            <Text className="text-white text-center font-['PoppinsMed']">Try Again</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <ScrollView className="p-4">
+          {sessions.length === 0 ? (
+            <Text className="text-center text-gray-500 mt-4">No sessions found</Text>
+          ) : (
+            sessions.map((session, index) => {
+              const getStatusStyle = (status) => {
+                switch(status.toLowerCase()) {
+                  case 'completed':
+                    return {
+                      container: 'bg-green-100',
+                      text: 'text-green-600',
+                      icon: 'checkcircle'
+                    };
+                  case 'cancelled':
+                    return {
+                      container: 'bg-red-100',
+                      text: 'text-red-600',
+                      icon: 'closecircle'
+                    };
+                  case 'confirmed':
+                    return {
+                      container: 'bg-yellow-100',
+                      text: 'text-yellow-600',
+                      icon: 'clockcircle'
+                    };
+                  case 'pending':
+                    return {
+                      container: 'bg-blue-100',
+                      text: 'text-blue-600',
+                      icon: 'loading1'
+                    };
+                  default:
+                    return {
+                      container: 'bg-gray-100',
+                      text: 'text-gray-600',
+                      icon: 'questioncircle'
+                    };
+                }
+              };
+
+              const statusStyle = getStatusStyle(session.status);
+              const capitalizedStatus = session.status.charAt(0).toUpperCase() + session.status.slice(1).toLowerCase();
+
+              return (
+                <View
+                  key={index}
+                  className={`p-4 mb-2 rounded-lg ${statusStyle.container}`}
+                >
+                  <Text className="text-lg font-['PoppinsSemiBold']">{session.topic}</Text>
+                  <Text className="text-md text-gray-700 font-['PoppinsMed'] mt-1">
+                    Time Slot: {session.timeSlot}
+                  </Text>
+                  <View className="flex-row items-center mt-2">
+                    <AntDesign name={statusStyle.icon} size={16} className={statusStyle.text} />
+                    <Text className={`text-md font-['PoppinsMed'] ml-1 ${statusStyle.text}`}>
+                      {capitalizedStatus}
+                    </Text>
+                  </View>
+                </View>
+              );
+            })
+          )}
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
 
-export default guidenceStatus;
+export default GuidanceStatus;

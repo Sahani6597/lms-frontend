@@ -23,7 +23,7 @@ export default function Layout() {
   }, []);
 
   // Hide the tab bar when navigating inside Quiz subpages
-  const shouldHideTabBar = pathname.startsWith('/Quiz/');
+  const shouldHideTabBar = pathname.startsWith('/Quiz/') || pathname.startsWith('/Profile/') ;
 
   return (
     <Tabs

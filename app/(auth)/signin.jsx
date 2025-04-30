@@ -12,21 +12,34 @@ const Signin = () => {
   const login = useAuthStore((state) => state.login);
   const handleLogin = async () => {
     if (email == "" || password == "") {
-      Alert.alert("Please fill all the fields")
+      Alert.alert("Please fill all the fields");
+      return;
     }
     try {
       const data = await loginUser({ email, password });
-      const token = data?.token;
-      if (token) {
+      const { token, user } = data;
+
+      if (token && user?.role) {
         await login(token);
-        router.replace("/(tabs)"); // Redirect to Home
+        switch(user.role) {
+          case 'admin':
+            router.replace("/(admin)");
+            break;
+          case 'instructor':
+            router.replace("/(instructor)");
+            break;
+          case 'student':
+            router.replace("/(tabs)");
+            break;
+          default:
+            Alert.alert("Access Denied", "Your account type is not recognized");
+        }
       } else {
-        Alert.alert("Login Failed", "Invalid credentials");
+        Alert.alert("Login Failed", "Invalid credentials or role not assigned");
       }
     } catch (e) {
       Alert.alert("Error", e.message || "Login failed");
     }
-
   }
   return (
     <SafeAreaView className="bg-white flex-1">

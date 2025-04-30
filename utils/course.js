@@ -1,6 +1,6 @@
 import axios from 'axios';
-
-const API_URL = 'http://192.168.1.104:5001/api/courses';
+import { API_BK } from "../config";
+const API_URL = `${API_BK}/courses`;
 
 // Fetch all courses with optional search query
 export const fetchCourses = async (search = '') => {

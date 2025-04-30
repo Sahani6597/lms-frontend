@@ -1,6 +1,6 @@
 import axios from "axios";
-
-const API_BASE_URL = "http://192.168.1.104:5001/api/users"; // Update with your backend IP
+import { API_BK } from "../config";
+const API_BASE_URL = `${API_BK}/users`; // Update with your backend IP
 
 export const signupUser = async (userData) => {
   try {

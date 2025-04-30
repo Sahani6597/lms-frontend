@@ -13,7 +13,6 @@ const QuizScreen = () => {
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [score, setScore] = useState(0);
   const router = useRouter();
-  const setQuizScore = useQuizStore((state) => state.setQuizScore);
 
   const currentQuestion = quiz.questions[currentQuestionIndex];
 
@@ -37,7 +36,6 @@ const QuizScreen = () => {
   // Handle submitting the quiz
   const handleSubmitQuiz = () => {
     const finalScore = score + (selectedAnswer === currentQuestion.answer ? 1 : 0);
-    setQuizScore(quiz.id, finalScore, quiz.questions.length);
     router.push({
       pathname: "/(tabs)/Quiz/result",
       params: {
